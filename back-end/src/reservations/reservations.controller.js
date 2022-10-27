@@ -5,9 +5,9 @@ const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
  */
 async function list(req, res) {
   console.log('hi')
-  const data = await service.list()
+  // const data = await service.list()
   res.json({
-    data
+    data: 'hi'
   });
 }
 
