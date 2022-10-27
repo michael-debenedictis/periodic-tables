@@ -10,7 +10,7 @@ async function list(date) {
       .select('*')
   }
 }
-console.log('hi')
+
 
 module.exports = {
   list,
