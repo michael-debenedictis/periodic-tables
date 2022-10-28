@@ -90,7 +90,7 @@ async function list(req, res) {
   const date = req.query.date;
   // seed.filter((cur) => cur.reservation_date === date)
   const data = await service.list(date)
-  console.log(data, 'hi')
+  console.log(data, 'sup', date);
   res.json({
     data: data
   });
