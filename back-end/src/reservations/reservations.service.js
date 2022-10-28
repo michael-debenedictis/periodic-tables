@@ -11,7 +11,15 @@ async function list(date) {
   }
 }
 
+async function create(NewReservation) {
+  return knex('reservations')
+    .insert(NewReservation)
+    .returning('*')
+    .then((createdRecords) => createdRecords[0])
+}
+
 
 module.exports = {
   list,
+  create,
 };

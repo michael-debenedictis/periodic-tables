@@ -95,6 +95,15 @@ async function list(req, res) {
   });
 }
 
+async function create(req, res) {
+  const NewReservation = req.body.data;
+  const response = await service.create(NewReservation);
+  res.status(201).json({
+    data: response
+  });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
+  create: asyncErrorBoundary(create),
 };

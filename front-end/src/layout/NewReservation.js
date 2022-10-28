@@ -1,10 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { createReservation } from "../utils/api";
 
 function NewReservation() {
   const history = useHistory();
-  console.log(history)
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -38,8 +38,17 @@ function NewReservation() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //implement saving of reservation to db
-    history.push(`/dashboard?date=${reservationDate}`)
+    const reservation = {
+      first_name: event.target.first_name.value,
+      last_name: event.target.last_name.value,
+      mobile_number: event.target.mobile_number.value,
+      reservation_date: event.target.reservation_date.value,
+      reservation_time: event.target.reservation_time.value,
+      people: event.target.people.value,
+    }
+    createReservation(reservation).then(() => {
+      history.push(`/dashboard?date=${reservationDate}`)
+    })
     setFirstName('');
     setLastName('');
     setMobileNumber('');
