@@ -103,7 +103,71 @@ async function create(req, res) {
   });
 }
 
+//middleware
+
+async function dataProvided(req, res, next) {
+  const data = req.body.data;
+  if (!data) {
+    next({status: 400, message: 'Data was not provided with request.'});
+  } else {
+    next();
+  }
+}
+
+async function fieldPopulated(req, res, next) {
+  const data = req.body.data;
+  if (!data.first_name) {
+    next({status: 400, message: "first_name field not provided and or empty"});
+  } else if (!data.last_name) {
+    next({status: 400, message: "last_name field not provided and or empty"});
+  } else if (!data.mobile_number) {
+    next({status: 400, message: "mobile_number field not provided and or empty"});
+  } else if (!data.reservation_date) {
+    next({status: 400, message: "reservation_date field not provided and or empty"});
+  } else if (!data.reservation_time) {
+    next({status: 400, message: "reservation_time field not provided and or empty"});
+  } else if (!data.people) {
+    next({status: 400, message: "people field not provided and or empty"});
+  } else {
+    next();
+  }
+}
+  
+async function dateValid(req, res, next) {
+  const date = req.body.data.reservation_date;
+  const dateFormat = /\d\d\d\d-\d\d-\d\d/;
+  if (!dateFormat.test(date)) {
+    next({status: 400, message: 'reservation_date must be formatted YYYY-MM-DD'});
+  } else {
+    next();
+  }
+}
+
+async function timeValid(req, res, next) {
+  const time = req.body.data.reservation_time;
+  const timeFormat = /\d\d:\d\d/;
+  if (!timeFormat.test(time)) {
+    next({status: 400, message: 'reservation_time must be formatted HH:MM'})
+  } else {
+    next();
+  }
+}
+
+async function validPeople(req, res, next) {
+  const ppl = req.body.data.people;
+  if (typeof ppl !== 'number') {
+    next({status: 400, message: 'The people field must be of type "number".'});
+  } else if (ppl < 1) {
+    next({status: 400, message: 'The people field must be greater than 1'});
+  } else {
+    next();
+  }
+}
+
+
+
+
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: asyncErrorBoundary(create),
+  create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(create)],
 };
