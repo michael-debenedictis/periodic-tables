@@ -5,8 +5,8 @@
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
+const API_BASE_URL = "http://localhost:5001"
+  // process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 /**
  * Defines the default headers for these functions to work with `json-server`
  */
@@ -61,9 +61,11 @@ export async function listReservations(params, signal) {
   console.log('hi')
   console.log(params)
   const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
+  Object.entries(params).forEach(([key, value]) => {
+    key = key.slice(0, 4) //gets rid of the word displayed thats passed in from params
     url.searchParams.append(key, value.toString())
-  );
+  });
+  console.log(url)
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
