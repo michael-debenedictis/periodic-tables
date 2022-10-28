@@ -39,7 +39,7 @@ const handleToday = () => {
 const handlePrevious = () => {
   setDateDisplayed((cur) => previous(cur));
 }
-
+console.log(reservations)
   return (
     <main>
       <h1>Dashboard</h1>
@@ -50,7 +50,31 @@ const handlePrevious = () => {
         <button onClick={handleNext}>Next</button>
       </div>
       <ErrorAlert error={reservationsError} />
-      {reservations.length > 0 ? JSON.stringify(reservations) : `No reservations for ${dateDisplayed}`}
+      {reservations.length < 1 ? `No reservations for ${dateDisplayed}` : ''}
+      <div>
+        {reservations.map((reservation) => {
+          return (
+            <div>
+              <h4>{reservation.reservation_time}</h4>
+              <table style={{width: '100%', border: '1px solid black'}} >
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>
+                  <th>Mobile Number</th>
+                  <th>Party Number</th>
+                </tr>
+                <tr>
+                  <td>{reservation.reservation_id}</td>
+                  <td>{`${reservation.first_name} ${reservation.last_name}`}</td>
+                  <td>{reservation.mobile_number}</td>
+                  <td>{reservation.people}</td>
+                </tr>
+                
+              </table>
+            </div>
+          )
+        })}
+      </div>
     </main>
   );
 }
