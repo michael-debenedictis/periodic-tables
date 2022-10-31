@@ -86,6 +86,8 @@ const seed = [
   }
 ]
 
+//requests --------
+
 async function list(req, res) {
   const date = req.query.date;
   // seed.filter((cur) => cur.reservation_date === date)
@@ -103,7 +105,7 @@ async function create(req, res) {
   });
 }
 
-//middleware
+//middleware --------
 
 async function dataProvided(req, res, next) {
   const data = req.body.data;
@@ -164,10 +166,32 @@ async function validPeople(req, res, next) {
   }
 }
 
+async function isWorkingDateAndTime(req, res, next) { //run after the dateValid and timeValid functions in the pipeline
+  const msUtcReservation = reservationConvertUTC(req.body.data.reservation_date, req.body.data.reservation_time);
+  const msUtcToday = Date.now();
+  const day = new Date(`${req.body.data.reservation_date}T${req.body.data.reservation_time}`).getDay();
+  if (msUtcReservation < msUtcToday) {
+    next({status: 400, message: 'The provided date and or time has already passed.'})
+  } else if (day === 2) {
+    next({status: 400, message: 'Reservation falls on a Tuesday (non working day).'})
+  } else {
+    next();
+  }
+}
+
+//helpr functions --------
+
+function reservationConvertUTC(date, time) {
+  const ymdArray = date.split('-') // [year, month, date]
+  const timeArray = time.split(':') // [hrs, min]
+  const all = [...ymdArray, ...timeArray];
+  return Date.UTC(...all)
+}
+
 
 
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(create)],
+  create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDate), asyncErrorBoundary(create)],
 };

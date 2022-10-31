@@ -1,7 +1,8 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import ErrorAlert from "./ErrorAlert";
 
 function NewReservation() {
   const history = useHistory();
@@ -11,6 +12,8 @@ function NewReservation() {
   const [reservationDate, setReservationDate] = useState('');
   const [reservationTime, setReservationTime] = useState('');
   const [people, setPeople] = useState('');
+
+  const [newReservationError, setNewReservationError] = useState(null);
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -44,22 +47,27 @@ function NewReservation() {
       mobile_number: event.target.mobile_number.value,
       reservation_date: event.target.reservation_date.value,
       reservation_time: event.target.reservation_time.value,
-      people: event.target.people.value,
+      people: Number(event.target.people.value,),
     }
-    createReservation(reservation).then(() => {
-      history.push(`/dashboard?date=${reservationDate}`)
-    })
-    setFirstName('');
-    setLastName('');
-    setMobileNumber('');
-    setReservationDate('');
-    setReservationTime('');
-    setPeople('');
+    
+    createReservation(reservation)
+      .then(() => {
+        setFirstName('');
+        setLastName('');
+        setMobileNumber('');
+        setReservationDate('');
+        setReservationTime('');
+        setPeople('');
+        history.push(`/dashboard?date=${reservationDate}`)
+      })
+      .catch(setNewReservationError)
+
   };
 
   return (
     <>
       <h1>Create a new reservation</h1>
+      <ErrorAlert error={newReservationError} />
       <form name='newreservation' onSubmit={handleSubmit} >
         <div>
           <label htmlFor='first_name'>
