@@ -60,7 +60,7 @@ async function fetchJson(url, options, onCancel) {
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) => {
-    key = key.slice(0, 4) //gets rid of the word displayed thats passed in from params
+    key = key.slice(0, 4) //gets rid of the word 'displayed' thats passed in from params
     url.searchParams.append(key, value.toString())
   });
   return await fetchJson(url, { headers, signal }, [])

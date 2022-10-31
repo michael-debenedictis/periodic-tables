@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 /**
  * Defines the dashboard page.
@@ -13,7 +13,9 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 function Dashboard({ date }) {
   const location = useLocation();
   const query = location.search.slice(location.search.indexOf('=') + 1)
-  if (location.search) date = query;
+  if (location.search) {
+    date = query;
+  }
 
   const [dateDisplayed, setDateDisplayed] = useState(date);
   
@@ -39,7 +41,7 @@ const handleToday = () => {
 const handlePrevious = () => {
   setDateDisplayed((cur) => previous(cur));
 }
-console.log(reservations)
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -54,7 +56,7 @@ console.log(reservations)
       <div>
         {reservations.map((reservation) => {
           return (
-            <div>
+            <div key={reservation.reservation_time}>
               <h4>{reservation.reservation_time}</h4>
               <table style={{width: '100%', border: '1px solid black'}} >
                 <tr>
@@ -69,7 +71,6 @@ console.log(reservations)
                   <td>{reservation.mobile_number}</td>
                   <td>{reservation.people}</td>
                 </tr>
-                
               </table>
             </div>
           )
