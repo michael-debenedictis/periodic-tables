@@ -60,7 +60,7 @@ function NewReservation() {
         setPeople('');
         history.push(`/dashboard?date=${reservationDate}`)
       })
-      .catch(setNewReservationError)
+      .catch(setNewReservationError);
 
   };
 

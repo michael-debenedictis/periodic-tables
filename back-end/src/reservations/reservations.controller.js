@@ -168,12 +168,18 @@ async function validPeople(req, res, next) {
 
 async function isWorkingDateAndTime(req, res, next) { //run after the dateValid and timeValid functions in the pipeline
   const msUtcReservation = reservationConvertUTC(req.body.data.reservation_date, req.body.data.reservation_time);
-  const msUtcToday = Date.now();
-  const day = new Date(`${req.body.data.reservation_date}T${req.body.data.reservation_time}`).getDay();
-  if (msUtcReservation < msUtcToday) {
-    next({status: 400, message: 'The provided date and or time has already passed.'})
-  } else if (day === 2) {
-    next({status: 400, message: 'Reservation falls on a Tuesday (non working day).'})
+  const msUtcNow = Date.now();
+  const date = new Date(`${req.body.data.reservation_date}T${req.body.data.reservation_time}`);
+  const reservationEarliest = new Date(`${req.body.data.reservation_date}T10:30:00`);
+  const reservationLatest = new Date(`${req.body.data.reservation_date}T21:30:00`);
+  if (msUtcReservation < msUtcNow) {
+    next({status: 400, message: 'The provided date and or time has already passed.'});
+  } else if (date.getDay() === 2) {
+    next({status: 400, message: 'Reservation falls on a Tuesday (non working day).'});
+  } else if (date < reservationEarliest) {
+    next({status: 400, message: 'Reservations must be after 10:30 AM.'});
+  } else if (date > reservationLatest) {
+    next({status: 400, message: 'Reservations must be prior to 9:30 PM.'});
   } else {
     next();
   }
