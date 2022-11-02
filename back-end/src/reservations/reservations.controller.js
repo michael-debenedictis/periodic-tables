@@ -97,6 +97,15 @@ async function list(req, res) {
   });
 }
 
+async function read(req, res) {
+  const reservationId = req.params.reservationId;
+  console.log(reservationId)
+  const response = await service.read(reservationId);
+  res.json({
+    data: response
+  });
+}
+
 async function create(req, res) {
   const NewReservation = req.body.data;
   const response = await service.create(NewReservation);
@@ -199,5 +208,6 @@ function reservationConvertUTC(date, time) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+  read: asyncErrorBoundary(read),
   create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(create)],
 };
