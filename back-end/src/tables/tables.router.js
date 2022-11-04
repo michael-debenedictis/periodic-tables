@@ -7,4 +7,8 @@ router.route('/')
   .post(controller.create)
   .all(methodNotAllowed)
 
+router.route('/:tableId/seat')
+  .put(controller.seatReservation)
+  .all(methodNotAllowed)
+
 module.exports = router;

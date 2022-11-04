@@ -99,7 +99,6 @@ async function list(req, res) {
 
 async function read(req, res) {
   const reservationId = req.params.reservationId;
-  console.log(reservationId)
   const response = await service.read(reservationId);
   res.json({
     data: response

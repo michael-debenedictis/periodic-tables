@@ -3,7 +3,7 @@ exports.up = function(knex) {
     table.increments('table_id').primary();
     table.string('table_name');
     table.integer('capacity');
-    table.string('occupied').nullable();
+    table.integer('reservation_id').nullable();
     table.timestamps(true, true);
   });
 };

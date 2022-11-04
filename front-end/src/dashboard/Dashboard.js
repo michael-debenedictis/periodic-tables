@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import Tables from "./Tables";
 
 /**
  * Defines the dashboard page.
@@ -64,17 +65,23 @@ const handlePrevious = () => {
                   <th>Name</th>
                   <th>Mobile Number</th>
                   <th>Party Number</th>
+                  <th> </th>
                 </tr>
                 <tr>
                   <td>{reservation.reservation_id}</td>
                   <td>{`${reservation.first_name} ${reservation.last_name}`}</td>
                   <td>{reservation.mobile_number}</td>
                   <td>{reservation.people}</td>
+                  <td><a href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a></td>
                 </tr>
               </table>
             </div>
           )
         })}
+      </div>
+      <h4>Tables</h4>
+      <div>
+        <Tables />
       </div>
     </main>
   );
