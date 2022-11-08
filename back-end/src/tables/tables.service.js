@@ -28,9 +28,17 @@ async function seatReservation(tableUpdated) {
     .then((createdRecords) => createdRecords[0])
 }
 
+async function reservationFinish(tableId) {
+  return knex('tables')
+    .select('*')
+    .where({ table_id: tableId })
+    .del()
+}
+
 module.exports = {
   list,
   create,
   read,
   seatReservation,
+  reservationFinish,
 }

@@ -9,6 +9,7 @@ router.route('/')
 
 router.route('/:tableId/seat')
   .put(controller.seatReservation)
+  .delete(controller.reservationFinish)
   .all(methodNotAllowed)
 
 module.exports = router;
