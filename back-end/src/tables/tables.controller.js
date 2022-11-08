@@ -31,7 +31,7 @@ async function seatReservation(req, res) {
 
 }
 
-async function reservationFinish(req, res) {
+async function reservationFinish(req, res) { // tests wanted a response from a delete request so I had to delete the whole row in the table for table and create a new one with reservation_id null, rather than using a put and updating just that columns value
   const tableId = req.params.tableId;
   const table = await service.read(tableId);
   table.reservation_id = null;

@@ -1,4 +1,4 @@
-
+//cant delete this migration file without causing errors for some reason
 exports.up = function(knex) {
   return knex.schema.createTable('occupied', (occupied) => {
     occupied.increments('occupied_id').primary();
