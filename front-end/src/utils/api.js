@@ -112,3 +112,12 @@ export async function seatReservation(tableId, reservationId) {
   };
   return await fetchJson(url, options);
 }
+
+export async function reservationFinish(tableId, reservationId) {
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
+  const options = {
+    method: 'DELETE',
+    headers
+  };
+  return await fetchJson(url, options);
+}

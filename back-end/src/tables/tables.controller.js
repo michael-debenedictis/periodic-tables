@@ -28,6 +28,18 @@ async function seatReservation(req, res) {
   res.status(200).json({
     data: response
   });
+
+}
+
+async function reservationFinish(req, res) {
+  const tableId = req.params.tableId;
+  const table = await service.read(tableId);
+  table.reservation_id = null;
+  await service.reservationFinish(tableId);
+  await service.create(table);
+  res.status(200).json({
+    data: table
+  });
 }
 
 //middleware --------
@@ -102,8 +114,27 @@ async function tableNotOccupied(req, res, next) {
   }
 }
 
+async function isOccupied(req, res, next) {
+  const table = await service.read(req.params.tableId);
+  if (!table.reservation_id) {
+    next({status: 400, message: 'table not occupied.'})
+  } else {
+    next();
+  }
+}
+
+async function tableExists(req, res, next) {
+  const table = await service.read(req.params.tableId);
+  if (!table) {
+    next({status: 404, message: `table_id ${req.params.tableId} doesnt exist.`});
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(nameFieldValid), asyncErrorBoundary(capacityFieldValid), asyncErrorBoundary(create)],
   seatReservation: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(reservationFieldValid), asyncErrorBoundary(tableCapacityAccomodates), asyncErrorBoundary(tableNotOccupied), asyncErrorBoundary(seatReservation)],
+  reservationFinish: [asyncErrorBoundary(tableExists), asyncErrorBoundary(isOccupied), asyncErrorBoundary(reservationFinish)],
 }
