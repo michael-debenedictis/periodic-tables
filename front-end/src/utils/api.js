@@ -121,3 +121,23 @@ export async function reservationFinish(tableId, reservationId) {
   };
   return await fetchJson(url, options);
 }
+
+export async function changeStatus(reservationId, newStatus) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationId}/status`);
+  const options = {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({ data: {status: newStatus}})
+  };
+  const response = await fetchJson(url, options);
+  return response
+}
+
+export async function reservationRemove(reservationId) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
+  const options = {
+    method: 'DELETE',
+    headers
+  };
+  return await fetchJson(url, options);
+}

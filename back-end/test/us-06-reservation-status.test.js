@@ -119,7 +119,6 @@ describe("US-06 - Reservation status", () => {
         .put(`/reservations/${reservationOne.reservation_id}/status`)
         .set("Accept", "application/json")
         .send({ data: { status: "seated" } });
-
       expect(response.body.error).toContain("finished");
       expect(response.status).toBe(400);
     });
@@ -133,7 +132,6 @@ describe("US-06 - Reservation status", () => {
           .put(`/reservations/${reservationOne.reservation_id}/status`)
           .set("Accept", "application/json")
           .send({ data: { status } });
-
         expect(response.body.data).toHaveProperty("status", status);
         expect(response.status).toBe(200);
       }

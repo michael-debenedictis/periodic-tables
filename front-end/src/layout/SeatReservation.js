@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router";
-import { listTables, seatReservation, readReservation } from "../utils/api";
+import { listTables, seatReservation, readReservation, changeStatus } from "../utils/api";
 import ErrorAlert from "./ErrorAlert";
 
 function SeatReservation() {
@@ -36,6 +36,7 @@ function SeatReservation() {
     const reservationId = reservation.reservation_id;
     const tableId = event.target.table_id.value;
     seatReservation(tableId, reservationId)
+      .then(() => changeStatus(reservationId, 'seated'))
       .then(() => history.push('/dashboard'))
       .catch(setTableUpdatedError)
   };

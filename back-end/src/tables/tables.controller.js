@@ -25,6 +25,7 @@ async function seatReservation(req, res) {
     reservation_id: reservationId
   };
   const response = await service.seatReservation(tableUpdated);
+  await reservationsService.changeStatus(reservationId, 'seated');
   res.status(200).json({
     data: response
   });
@@ -34,11 +35,12 @@ async function seatReservation(req, res) {
 async function reservationFinish(req, res) { // tests wanted a response from a delete request so I had to delete the whole row in the table for table and create a new one with reservation_id null, rather than using a put and updating just that columns value
   const tableId = req.params.tableId;
   const table = await service.read(tableId);
+  const prevReservationId = table.reservation_id;
   table.reservation_id = null;
-  await service.reservationFinish(tableId);
-  await service.create(table);
+  await service.reservationFinish(tableId); // deleting the table
+  await service.create(table); // recreating the table
   res.status(200).json({
-    data: table
+    data: ''
   });
 }
 
@@ -107,8 +109,11 @@ async function tableCapacityAccomodates(req, res, next) {
 
 async function tableNotOccupied(req, res, next) {
   const table = res.locals.table;
+  const reservation = await reservationsService.read(req.body.data.reservation_id);
   if (table.reservation_id) {
     next({status: 400, message: 'Table already occupied.'});
+  } else if (reservation.status === 'seated') {
+    next({status: 400, message: 'Currently seated reservation.'})
   } else {
     next();
   }

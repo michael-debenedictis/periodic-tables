@@ -113,6 +113,23 @@ async function create(req, res) {
   });
 }
 
+async function changeStatus(req, res) {
+  const reservationId = req.params.reservationId;
+  const status = req.body.data.status;
+  const response = await service.changeStatus(reservationId, status);
+  res.status(200).json({
+    data: response
+  });
+}
+
+async function reservationRemove(req, res) {
+  const reservationId = req.params.reservationId;
+  const response = await service.reservationRemove(reservationId);
+  res.status(204).json({
+    data: response
+  });
+}
+
 //middleware --------
 
 async function dataProvided(req, res, next) {
@@ -193,6 +210,46 @@ async function isWorkingDateAndTime(req, res, next) { //run after the dateValid 
   }
 }
 
+async function validStatus(req, res, next) {
+  const newReservation = req.body.data;
+  if (newReservation.status === 'seated') {
+    next({status: 400, message: `Reservation must not start with status: ${newReservation.status}`});
+  } else if (newReservation.status === 'finished') {
+    next({status: 400, message: `Reservation must not start with status: ${newReservation.status}`});
+  } else {
+    next();
+  }
+}
+
+async function idValid(req, res, next) {
+  const reservationId = req.params.reservationId;
+  const valid = await service.read(reservationId);
+  if (!valid) {
+    next({status: 404, message: `${reservationId} doesnt exist as a reservation_id.`})
+  } else {
+    next();
+  }
+}
+
+async function validStatusData(req, res, next) {
+  const newStatus = req.body.data.status;
+  const reservation = await service.read(req.params.reservationId);
+  const curStatus = reservation.status;
+  if (curStatus === 'finished') {
+    next({status: 400, message: 'reservation status is currently already finished.'});
+  }
+  
+  if (newStatus === 'booked') {
+    next();
+  } else if (newStatus === 'seated') {
+    next();
+  } else if (newStatus === 'finished') {
+    next();
+  } else {
+    next({status: 400, message: 'unknown status provided.'});
+  }
+}
+
 //helpr functions --------
 
 function reservationConvertUTC(date, time) {
@@ -208,5 +265,7 @@ function reservationConvertUTC(date, time) {
 module.exports = {
   list: asyncErrorBoundary(list),
   read: asyncErrorBoundary(read),
-  create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(create)],
+  create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(validStatus), asyncErrorBoundary(create)],
+  changeStatus: [asyncErrorBoundary(idValid), asyncErrorBoundary(validStatusData), asyncErrorBoundary(changeStatus)],
+  reservationRemove: [asyncErrorBoundary(reservationRemove)],
 };

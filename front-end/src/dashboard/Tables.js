@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listTables, reservationFinish } from '../utils/api';
+import { changeStatus, listTables, readReservation, reservationFinish, reservationRemove } from '../utils/api';
 
 function Tables() {
   const [tables, setTables] = useState([]);
@@ -16,8 +16,11 @@ function Tables() {
   const handleFinish = (event) => {
     if (window.confirm('Is this table ready to seat new guests? This cannot be undone.')) {
       const tableId = event.target.id;
+      const reservationId = event.target.getAttribute('data-reservation-id')
       reservationFinish(tableId)
-        .then((cur) => window.location.reload())
+        .then(() => readReservation(reservationId))
+        .then(() => changeStatus(reservationId, 'finished'))
+        .then(() => window.location.reload())
     }
   };
 
@@ -39,7 +42,7 @@ function Tables() {
                   {table.reservation_id ? `Occupied: Reservation ${table.reservation_id}` : 'free'}
                 </div>
                 <div>
-                  {table.reservation_id ? <button id={table.table_id} data-table-id-finish={table.table_id} onClick={handleFinish} >Finish</button> : null}
+                  {table.reservation_id ? <button id={table.table_id} data-reservation-id={table.reservation_id} data-table-id-finish={table.table_id} onClick={handleFinish} >Finish</button> : null}
                 </div>
               </div>
             </li>
