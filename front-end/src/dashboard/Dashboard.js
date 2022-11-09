@@ -4,6 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
 import { Link, useLocation } from "react-router-dom";
 import Tables from "./Tables";
+import Reservations from "./Reservations";
 
 /**
  * Defines the dashboard page.
@@ -33,15 +34,15 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-const handleNext = () => {
-  setDateDisplayed((cur) => next(cur));
-}
-const handleToday = () => {
-  setDateDisplayed(today());
-}
-const handlePrevious = () => {
-  setDateDisplayed((cur) => previous(cur));
-}
+  const handleNext = () => {
+    setDateDisplayed((cur) => next(cur));
+  }
+  const handleToday = () => {
+    setDateDisplayed(today());
+  }
+  const handlePrevious = () => {
+    setDateDisplayed((cur) => previous(cur));
+  }
 
   return (
     <main>
@@ -53,41 +54,16 @@ const handlePrevious = () => {
         <button onClick={handleNext}>Next</button>
       </div>
       <ErrorAlert error={reservationsError} />
-      {reservations.filter((reservation) => reservation.status !== 'finished').length < 1 ? `No reservations for ${dateDisplayed}` : null}
+      {reservations.length < 1 ? `No reservations for ${dateDisplayed}` : ""}
       <div>
-        {reservations.map((reservation) => {
-          if (reservation.status !== 'finished') {
-            return (
-              <div key={reservation.reservation_time}>
-                <h4>{reservation.reservation_time}</h4>
-                <table style={{width: '100%', border: '1px solid black'}} >
-                  <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Mobile Number</th>
-                    <th>Party Number</th>
-                    <th> </th>
-                  </tr>
-                  <tr>
-                    <td>{reservation.reservation_id}</td>
-                    <td>{`${reservation.first_name} ${reservation.last_name}`}</td>
-                    <td>{reservation.mobile_number}</td>
-                    <td>{reservation.people}</td>
-                    {reservation.status === 'booked' ? <><p data-reservation-id-status={reservation.reservation_id}>Booked</p><td><a href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a></td></> : null}
-                    {reservation.status === 'seated' ? <p data-reservation-id-status={reservation.reservation_id}>Seated</p> : null}
-                  </tr>
-                </table>
-              </div>
-            )
-          }
-        })}
+        <Reservations dateDisplayed={dateDisplayed} setDateDisplayed={setDateDisplayed} reservations={reservations} reservationsError={reservationsError} />
       </div>
       <h4>Tables</h4>
       <div>
         <Tables />
       </div>
     </main>
-  );
+  )
 }
 
 

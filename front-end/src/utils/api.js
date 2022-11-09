@@ -58,17 +58,13 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
-  console.log(params)
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) => {
     key = key.replace('Displayed', '') //gets rid of the word 'displayed' thats passed in from params
-    console.log(key)
     url.searchParams.append(key, value.toString())
   });
-  console.log(url)
-  return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+  const response = await fetchJson(url, { headers, signal }, [])
+  return response
 }
 
 export async function readReservation(reservationId) {

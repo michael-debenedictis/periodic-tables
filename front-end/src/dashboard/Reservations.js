@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react";
-import ErrorAlert from "../layout/ErrorAlert";
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 
-function Reservations({date, dateDisplayed, reservations, reservationsError}) {
+function Reservations( { reservations } ) {
+
   return (
     <>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {dateDisplayed}</h4>
-      </div>
-      <ErrorAlert error={reservationsError} />
-      {reservations.length < 1 ? `No reservations for ${dateDisplayed}` : ""}
       <div>
         {reservations.map((reservation) => {
           return (

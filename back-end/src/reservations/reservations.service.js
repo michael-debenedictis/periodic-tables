@@ -9,11 +9,11 @@ async function list(date, phoneNumber) {
   } else if (phoneNumber) {
     return knex('reservations')
       .select('*')
-      .where({ mobile_number: phoneNumber})
-  } else {
-    return knex('reservations')
-      .select('*')
-      .whereNot({ status: 'finished'})
+      .whereRaw(
+        "translate(mobile_number, '() -', '') like ?",
+        `%${phoneNumber.replace(/\D/g, "")}%`
+      )
+      .orderBy("reservation_date");
   }
 }
 

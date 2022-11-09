@@ -4,16 +4,18 @@ import Reservations from '../dashboard/Reservations';
 
 function Search() {
 
-  const [reservation, setReservation] = useState({})
+  const [reservations, setReservations] = useState([])
+  const [hasClicked, setHasClicked] = useState(false)
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const phoneNumber = event.target.mobile_number.value;
     listReservations( {mobile_number: phoneNumber} )
-      .then(setReservation)
+      .then((res) => {
+        if (res) setReservations(res);
+      })
+      .then(() => setHasClicked(true));
   }
-
-  console.log(reservation)
 
   return (
     <>
@@ -23,8 +25,9 @@ function Search() {
           <button type='submit'>Search</button>
         </form>
       </div>
+      {hasClicked ? reservations.length < 1 ? `No reservations found` : "" : null}
       <div>
-        
+        <Reservations reservations={reservations} />
       </div>
     </>
   )
