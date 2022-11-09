@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Tables from "./Tables";
 import Reservations from "./Reservations";
 
@@ -19,12 +19,14 @@ function Dashboard({ date }) {
     date = query;
   }
 
+  const [reRender, setRerender] = useState(false);
+
   const [dateDisplayed, setDateDisplayed] = useState(date);
   
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
-  useEffect(loadDashboard, [dateDisplayed])
+  useEffect(loadDashboard, [dateDisplayed, reRender])
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
@@ -56,7 +58,7 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       {reservations.length < 1 ? `No reservations for ${dateDisplayed}` : ""}
       <div>
-        <Reservations dateDisplayed={dateDisplayed} setDateDisplayed={setDateDisplayed} reservations={reservations} reservationsError={reservationsError} />
+        <Reservations reservations={reservations} setRerender={setRerender} />
       </div>
       <h4>Tables</h4>
       <div>

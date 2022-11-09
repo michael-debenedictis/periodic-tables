@@ -161,6 +161,8 @@ async function validStatusData(req, res, next) {
     next();
   } else if (newStatus === 'finished') {
     next();
+  } else if (newStatus === 'cancelled') {
+    next();
   } else {
     next({status: 400, message: 'unknown status provided.'});
   }

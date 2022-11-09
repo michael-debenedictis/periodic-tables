@@ -42,6 +42,7 @@ function NewTable() {
   return (
     <>
       <h1>Create a new table</h1>
+      <ErrorAlert error={newTableError} />
       <form name='newtable' onSubmit={handleSubmit}>
         <div>
           <label htmlFor='table_name'>

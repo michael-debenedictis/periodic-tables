@@ -5,7 +5,7 @@ async function list(date, phoneNumber) {
     return knex('reservations')
       .select('*')
       .where({ reservation_date: date })
-      .whereNot({ status: 'finished'})
+      .whereNot({ status: 'finished', status: 'cancelled' });
   } else if (phoneNumber) {
     return knex('reservations')
       .select('*')

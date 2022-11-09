@@ -29,8 +29,7 @@ function SeatReservation() {
       .then(setTables)
       .catch(setTablesError);
   }
-
-  ////////
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const reservationId = reservation.reservation_id;

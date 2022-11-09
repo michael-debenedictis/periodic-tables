@@ -1,7 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { changeStatus } from "../utils/api";
 
-function Reservations( { reservations } ) {
+function Reservations( { reservations, setRerender } ) {
+  
+  const handleCancel = (event) => {
+    if (window.confirm('Do you want to cancel this reservation? This cannot be undone.')){
+      const reservationId = event.target.getAttribute('data-reservation-id-cancel');
+      changeStatus(reservationId, 'cancelled')
+        .then(() => setRerender((cur) => !cur))
+    }
+  }
+
+  console.log('hi')
 
   return (
     <>
@@ -24,11 +35,23 @@ function Reservations( { reservations } ) {
                   <td>{reservation.mobile_number}</td>
                   <td>{reservation.people}</td>
                   <td>
+                  <div>
                     <Link
                       to={`/reservations/${reservation.reservation_id}/seat`}
                     >
                       Seat
                     </Link>
+                  </div>
+                  </td>
+                  <td>
+                  <div>
+                    <Link
+                      to={`/reservations/${reservation.reservation_id}/edit`}
+                      >
+                        Edit
+                    </Link>
+                    <button data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel} >Cancel</button>
+                  </div>
                   </td>
                 </tr>
               </table>
