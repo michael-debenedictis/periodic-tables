@@ -1,11 +1,15 @@
 const knex = require('../db/connection');
 
-async function list(date) {
+async function list(date, phoneNumber) {
   if (date) {
     return knex('reservations')
       .select('*')
       .where({ reservation_date: date })
       .whereNot({ status: 'finished'})
+  } else if (phoneNumber) {
+    return knex('reservations')
+      .select('*')
+      .where({ mobile_number: phoneNumber})
   } else {
     return knex('reservations')
       .select('*')

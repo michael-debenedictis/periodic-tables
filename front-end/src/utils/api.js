@@ -58,11 +58,14 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
+  console.log(params)
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) => {
-    key = key.slice(0, 4) //gets rid of the word 'displayed' thats passed in from params
+    key = key.replace('Displayed', '') //gets rid of the word 'displayed' thats passed in from params
+    console.log(key)
     url.searchParams.append(key, value.toString())
   });
+  console.log(url)
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
@@ -70,6 +73,11 @@ export async function listReservations(params, signal) {
 
 export async function readReservation(reservationId) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
+  return await fetchJson(url, { headers }, []);
+}
+
+export async function phoneSearch(phoneNumber) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
   return await fetchJson(url, { headers }, []);
 }
 
