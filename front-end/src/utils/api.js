@@ -67,14 +67,11 @@ export async function listReservations(params, signal) {
   return response
 }
 
-export async function readReservation(reservationId) {
+export async function readReservation(reservationId, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
-  return await fetchJson(url, { headers }, []);
-}
-
-export async function phoneSearch(phoneNumber) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
-  return await fetchJson(url, { headers }, []);
+  const response = await fetchJson(url, { headers, signal }, []);
+  response.reservation_date = response.reservation_date.slice(0, response.reservation_date.indexOf('T'));
+  return response
 }
 
 export async function createReservation(reservation, signal) {
@@ -133,8 +130,17 @@ export async function changeStatus(reservationId, newStatus) {
     headers,
     body: JSON.stringify({ data: {status: newStatus}})
   };
-  const response = await fetchJson(url, options);
-  return response
+  return await fetchJson(url, options);
+}
+
+export async function reservationUpdate(reservationId, reservationUpdated) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`)
+  const options = {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({ data: reservationUpdated })
+  };
+  return await fetchJson(url, options)
 }
 
 export async function reservationRemove(reservationId) {

@@ -12,8 +12,6 @@ function Reservations( { reservations, setRerender } ) {
     }
   }
 
-  console.log('hi')
-
   return (
     <>
       <div>
@@ -26,8 +24,8 @@ function Reservations( { reservations, setRerender } ) {
                   <th>Id</th>
                   <th>Name</th>
                   <th>Mobile Number</th>
-                  <th>Party Number</th>
-                  <th> </th>
+                  <th>Party</th>
+                  <th>Status</th>
                 </tr>
                 <tr>
                   <td>{reservation.reservation_id}</td>
@@ -35,23 +33,24 @@ function Reservations( { reservations, setRerender } ) {
                   <td>{reservation.mobile_number}</td>
                   <td>{reservation.people}</td>
                   <td>
-                  <div>
-                    <Link
-                      to={`/reservations/${reservation.reservation_id}/seat`}
-                    >
-                      Seat
-                    </Link>
-                  </div>
+                    <div data-reservation-id-status={reservation.reservation_id}>
+                      {reservation.status}
+                    </div>
+                    <div>
+                      {reservation.status !== 'seated' ? <Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link> : null }
+                    </div>
                   </td>
                   <td>
-                  <div>
-                    <Link
-                      to={`/reservations/${reservation.reservation_id}/edit`}
+                    <div>
+                      <button data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel} >Cancel</button>
+                    </div>
+                    <div>
+                      <Link
+                        to={`/reservations/${reservation.reservation_id}/edit`}
                       >
                         Edit
-                    </Link>
-                    <button data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel} >Cancel</button>
-                  </div>
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               </table>

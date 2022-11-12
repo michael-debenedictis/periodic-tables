@@ -17,17 +17,19 @@ function SeatReservation() {
   useEffect(loadReservation, []);
   function loadReservation() {
     const abortController = new AbortController();
-    readReservation(reservationId)
+    readReservation(reservationId, abortController.signal)
       .then(setReservation)
       .catch(setReservationError);
+    return () => abortController.abort();
   }
 
   useEffect(loadTables, []);
   function loadTables() {
     const abortController = new AbortController();
-    listTables()
+    listTables(abortController.signal)
       .then(setTables)
       .catch(setTablesError);
+    return () => abortController.abort();
   }
   
   const handleSubmit = (event) => {

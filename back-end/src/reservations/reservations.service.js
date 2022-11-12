@@ -5,7 +5,9 @@ async function list(date, phoneNumber) {
     return knex('reservations')
       .select('*')
       .where({ reservation_date: date })
-      .whereNot({ status: 'finished', status: 'cancelled' });
+      .whereNot({ status: 'finished'})
+      .whereNot({ status: 'cancelled'})
+      .orderBy("reservation_time");
   } else if (phoneNumber) {
     return knex('reservations')
       .select('*')
@@ -41,6 +43,17 @@ async function changeStatus(reservationId, status) {
     .then((createdRecords) => createdRecords[0])
 }
 
+async function update(reservationId, reservationUpdated) {
+  return knex('reservations')
+    .select('*')
+    .where({ reservation_id: reservationId })
+    .update({
+      ...reservationUpdated
+    })
+    .returning('*')
+    .then((createdRecords) => createdRecords[0])
+}
+
 async function reservationRemove(reservationId) {
   return knex('reservations')
     .select('*')
@@ -54,5 +67,6 @@ module.exports = {
   read,
   create,
   changeStatus,
+  update,
   reservationRemove,
 };

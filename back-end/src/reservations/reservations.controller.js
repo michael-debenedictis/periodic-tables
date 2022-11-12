@@ -38,6 +38,15 @@ async function changeStatus(req, res) {
   });
 }
 
+async function update(req, res) {
+  const reservationId = req.params.reservationId;
+  const reservationUpdated = req.body.data;
+  const response = await service.update(reservationId, reservationUpdated);
+  res.status(200).json({
+    data: response
+  });
+}
+
 async function reservationRemove(req, res) {
   const reservationId = req.params.reservationId;
   const response = await service.reservationRemove(reservationId);
@@ -114,9 +123,9 @@ async function isWorkingDateAndTime(req, res, next) { //run after the dateValid 
   const reservationEarliest = new Date(`${req.body.data.reservation_date}T10:30:00`);
   const reservationLatest = new Date(`${req.body.data.reservation_date}T21:30:00`);
   if (msUtcReservation < msUtcNow) {
-    next({status: 400, message: 'The provided date and or time has already passed.'});
+    next({status: 400, message: 'The provided date and or time must be in the future.'});
   } else if (date.getDay() === 2) {
-    next({status: 400, message: 'Reservation falls on a Tuesday (non working day).'});
+    next({status: 400, message: 'Restaurant closed on tuesdays.'});
   } else if (date < reservationEarliest) {
     next({status: 400, message: 'Reservations must be after 10:30 AM.'});
   } else if (date > reservationLatest) {
@@ -168,6 +177,16 @@ async function validStatusData(req, res, next) {
   }
 }
 
+async function reservationExists(req, res, next) {
+  const reservationId = req.params.reservationId;
+  const reservation = await service.read(reservationId)
+  if (!reservation) {
+    next({status: 404, message: `No reservation with the id: ${reservationId} found.`})
+  } else {
+    next();
+  }
+}
+
 //helpr functions --------
 
 function reservationConvertUTC(date, time) {
@@ -182,8 +201,9 @@ function reservationConvertUTC(date, time) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  read: asyncErrorBoundary(read),
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(validStatus), asyncErrorBoundary(create)],
   changeStatus: [asyncErrorBoundary(idValid), asyncErrorBoundary(validStatusData), asyncErrorBoundary(changeStatus)],
+  update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(validStatus), asyncErrorBoundary(update)],
   reservationRemove: [asyncErrorBoundary(reservationRemove)],
 };

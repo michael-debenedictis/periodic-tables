@@ -39,6 +39,7 @@ async function reservationFinish(req, res) { // tests wanted a response from a d
   table.reservation_id = null;
   await service.reservationFinish(tableId); // deleting the table
   await service.create(table); // recreating the table
+  await reservationsService.changeStatus(prevReservationId, 'finished');
   res.status(200).json({
     data: ''
   });

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { changeStatus, listTables, readReservation, reservationFinish, reservationRemove } from '../utils/api';
+import { listTables, readReservation, reservationFinish } from '../utils/api';
 
 function Tables() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
   
-  useEffect(loadTables, [])
+  useEffect(loadTables, []);
   function loadTables() {
     const abortController = new AbortController();
-    listTables()
+    listTables(abortController.signal)
       .then(setTables)
       .catch(setTablesError)
+    return () => abortController.abort();
   };
 
   const handleFinish = (event) => {
@@ -18,8 +19,7 @@ function Tables() {
       const tableId = event.target.id;
       const reservationId = event.target.getAttribute('data-reservation-id')
       reservationFinish(tableId)
-        .then(() => readReservation(reservationId))
-        .then(() => changeStatus(reservationId, 'finished'))
+        // then(() => readReservation(reservationId))
         .then(() => window.location.reload())
     }
   };
@@ -38,8 +38,8 @@ function Tables() {
                 <div>
                   Capacity: {table.capacity} 
                 </div>
-                <div data-table-id-status={table.table_id}>
-                  {table.reservation_id ? `Occupied: Reservation ${table.reservation_id}` : 'free'}
+                <div data-table-id-status={table.table_id} >
+                  {table.reservation_id ? `occupied: Reservation ${table.reservation_id}` : "free "}
                 </div>
                 <div>
                   {table.reservation_id ? <button id={table.table_id} data-reservation-id={table.reservation_id} data-table-id-finish={table.table_id} onClick={handleFinish} >Finish</button> : null}
