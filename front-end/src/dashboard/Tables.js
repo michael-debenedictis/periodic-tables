@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { listTables, readReservation, reservationFinish } from '../utils/api';
+import ErrorAlert from "../layout/ErrorAlert";
+import { listTables, reservationFinish } from '../utils/api';
 
 function Tables() {
   const [tables, setTables] = useState([]);
@@ -17,15 +18,14 @@ function Tables() {
   const handleFinish = (event) => {
     if (window.confirm('Is this table ready to seat new guests? This cannot be undone.')) {
       const tableId = event.target.id;
-      const reservationId = event.target.getAttribute('data-reservation-id')
       reservationFinish(tableId)
-        // then(() => readReservation(reservationId))
         .then(() => window.location.reload())
     }
   };
 
   return (
     <>
+      <ErrorAlert error={tablesError} />
       <div>
         <ul>
         {tables.map((table) => {

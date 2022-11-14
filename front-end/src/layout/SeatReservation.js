@@ -14,7 +14,7 @@ function SeatReservation() {
   const [reservationError, setReservationError] = useState(null);
   const [tableUpdatedError, setTableUpdatedError] = useState(null);
 
-  useEffect(loadReservation, []);
+  useEffect(loadReservation, [reservationId]);
   function loadReservation() {
     const abortController = new AbortController();
     readReservation(reservationId, abortController.signal)
@@ -46,6 +46,8 @@ function SeatReservation() {
     <>
       <h3>Reservation:</h3>
       <ErrorAlert error={tableUpdatedError} />
+      <ErrorAlert error={tablesError} />
+      <ErrorAlert error={reservationError} />
       <div>
         <table style={{ width: "100%", border: "1px solid black" }}>
           <tr>

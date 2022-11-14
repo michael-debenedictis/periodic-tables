@@ -15,7 +15,7 @@ function ReservationEdit() {
 
   const [errorSubmit, setErrorSubmit] = useState(null);
 
-  useEffect(loadReservation, [])
+  useEffect(loadReservation, [reservationId]);
   function loadReservation() {
     const abortController = new AbortController();
     setReservationError(null);
@@ -76,6 +76,7 @@ function ReservationEdit() {
           }
         })
         break
+      default:
     }
   }
 
@@ -90,6 +91,7 @@ function ReservationEdit() {
     <>
       <h1>Edit reservation</h1>
       <ErrorAlert error={errorSubmit} />
+      <ErrorAlert error={reservationError} />
       <FormReservation handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} />
     </>
   )

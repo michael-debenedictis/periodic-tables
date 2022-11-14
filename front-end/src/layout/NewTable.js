@@ -36,6 +36,7 @@ function NewTable() {
       case 'capacity':
         setCapacity(value);
         break;
+      default:
     };
   };
 
@@ -47,13 +48,13 @@ function NewTable() {
         <div>
           <label htmlFor='table_name'>
             Table Name
-            <input id='table_name' name='table_name' type='text' minLength='2' onChange={handleChange} required />
+            <input id='table_name' name='table_name' type='text' minLength='2' onChange={handleChange} value={tableName} required />
           </label>
         </div>
         <div>
           <label htmlFor='capacity'>
             Capacity
-            <input id='capacity' name='capacity' type='number' min='1' onChange={handleChange} required />
+            <input id='capacity' name='capacity' type='number' min='1' onChange={handleChange} value={capacity} required />
           </label>
         </div>
         <div>
