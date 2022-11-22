@@ -25,7 +25,7 @@
   },
   "scripts": {
     "comm_": "you may need --openssl-legacy-provider flag at the end of the build, eject, and start scripts",
-    "build": "react-scripts build",
+    "build": "react-scripts build --openssl-legacy-provider",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "npx cross-env CI=true npm run test:run",
