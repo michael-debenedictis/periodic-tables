@@ -44,47 +44,49 @@ function SeatReservation() {
 
   return (
     <>
-      <h3>Reservation:</h3>
-      <ErrorAlert error={tableUpdatedError} />
-      <ErrorAlert error={tablesError} />
-      <ErrorAlert error={reservationError} />
-      <div>
-        <table style={{ width: "100%", border: "1px solid black" }}>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Mobile Number</th>
-            <th>Party Number</th>
-          </tr>
-          <tr>
-            <td>{reservation.reservation_id}</td>
-            <td>{`${reservation.first_name} ${reservation.last_name}`}</td>
-            <td>{reservation.mobile_number}</td>
-            <td>{reservation.people}</td>
-          </tr>
-        </table>
-        <h3>Seat:</h3>
-      </div>
-      <form name="seatreservation" onSubmit={handleSubmit}>
+      <h1>Reservation:</h1>
+      <div className='space' >
+        <ErrorAlert error={tableUpdatedError} />
+        <ErrorAlert error={tablesError} />
+        <ErrorAlert error={reservationError} />
         <div>
-          <label htmlFor="table_number">
-            Table Number:
-            <select name="table_id">
-              {tables.map((table) => {
-                // if (reservation.people <= table.capacity && table.reservation_id === null) {
-                  return (
-                    <option key={table.table_id} value={table.table_id}>
-                      {table.table_name} - {table.capacity}
-                    </option>
-                  );
-              })}
-            </select>
-          </label>
+          <table style={{ width: "100%", border: "1px solid black" }}>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Mobile Number</th>
+              <th>Party Number</th>
+            </tr>
+            <tr>
+              <td>{reservation.reservation_id}</td>
+              <td>{`${reservation.first_name} ${reservation.last_name}`}</td>
+              <td>{reservation.mobile_number}</td>
+              <td>{reservation.people}</td>
+            </tr>
+          </table>
+          <h3>Seat:</h3>
         </div>
-        <div>
-          <button type="submit">Seat</button>
+        <form name="seatreservation" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="table_number">
+              Table Number:
+              <select name="table_id">
+                {tables.map((table) => {
+                  // if (reservation.people <= table.capacity && table.reservation_id === null) {
+                    return (
+                      <option key={table.table_id} value={table.table_id}>
+                        {table.table_name} - {table.capacity}
+                      </option>
+                    );
+                })}
+              </select>
+            </label>
+          </div>
+          <div>
+            <button type="submit">Seat</button>
+          </div>
+        </form>
         </div>
-      </form>
     </>
   );
 }

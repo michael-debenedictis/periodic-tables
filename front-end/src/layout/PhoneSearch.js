@@ -19,7 +19,8 @@ function Search() {
 
   return (
     <>
-      <div>
+      <h1>Search reservation by phone</h1>
+      <div className='space' >
         <form name='phonesearch' onSubmit={handleSubmit}>
           <input id='mobile_number' name='mobile_number' type='text' />
           <button type='submit'>Search</button>

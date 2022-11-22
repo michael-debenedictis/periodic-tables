@@ -1,4 +1,12 @@
 .side-bar {
-  background-color: #393a44;
+  background-color: #202C39;
   min-width: 200px;
+  background-image: linear-gradient(to right,  #202C39, #202C39, #202C39, #202C39, #090C10);
+  border-right: 8px solid black
+}
+
+@media only screen and (min-width: 768px) {
+  .side-bar {
+    min-height: 100vh
+  }
 }

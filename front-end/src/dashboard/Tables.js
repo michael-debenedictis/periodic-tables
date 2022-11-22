@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listTables, reservationFinish } from '../utils/api';
+import '../style.css';
 
 function Tables() {
   const [tables, setTables] = useState([]);
@@ -26,11 +27,11 @@ function Tables() {
   return (
     <>
       <ErrorAlert error={tablesError} />
-      <div>
-        <ul>
+      <div style={{overflow: 'auto', maxHeight: '350px'}} >
+        <ul style={{columnCount: '3'}} >
         {tables.map((table) => {
           return (
-            <li key={table.table_id}>
+            <li className='lists' key={table.table_id}>
               <div>
                 <div>
                   Table: {table.table_name}  
@@ -45,6 +46,7 @@ function Tables() {
                   {table.reservation_id ? <button id={table.table_id} data-reservation-id={table.reservation_id} data-table-id-finish={table.table_id} onClick={handleFinish} >Finish</button> : null}
                 </div>
               </div>
+              <hr style={{margin: '0px 100px 0px 0px' }} />
             </li>
           )
         })}

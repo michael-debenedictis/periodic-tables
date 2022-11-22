@@ -1,4 +1,5 @@
 import React from "react";
+import '../style.css';
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";

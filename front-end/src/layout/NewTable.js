@@ -43,25 +43,29 @@ function NewTable() {
   return (
     <>
       <h1>Create a new table</h1>
-      <ErrorAlert error={newTableError} />
-      <form name='newtable' onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor='table_name'>
-            Table Name
-            <input id='table_name' name='table_name' type='text' minLength='2' onChange={handleChange} value={tableName} required />
-          </label>
-        </div>
-        <div>
-          <label htmlFor='capacity'>
-            Capacity
-            <input id='capacity' name='capacity' type='number' min='1' onChange={handleChange} value={capacity} required />
-          </label>
-        </div>
-        <div>
-          <button onClick={history.goBack}>Cancel</button>
-          <button type='submit'>Submit</button>
-        </div>
-      </form>
+      <div className='space' >
+        <ErrorAlert error={newTableError} />
+        <form name='newtable' onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor='table_name'>
+              Table Name
+              <br/>
+              <input id='table_name' name='table_name' type='text' minLength='2' onChange={handleChange} value={tableName} required />
+            </label>
+          </div>
+          <div>
+            <label htmlFor='capacity'>
+              Capacity
+              <br/>
+              <input id='capacity' name='capacity' type='number' min='1' onChange={handleChange} value={capacity} required />
+            </label>
+          </div>
+          <div>
+            <button onClick={history.goBack}>Cancel</button>
+            <button type='submit'>Submit</button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }
