@@ -20,7 +20,7 @@ describe("US-04 - Seat reservation - E2E", () => {
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
     setDefaultOptions({ timeout: 1000 });
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({headless:false})
   });
 
   afterAll(async () => {
@@ -37,6 +37,7 @@ describe("US-04 - Seat reservation - E2E", () => {
 
     test("filling and submitting form creates a new table", async () => {
       const tableName = `#${Date.now().toString(10)}`;
+      console.log(tableName)
 
       await page.type("input[name=table_name]", tableName);
       await page.type("input[name=capacity]", "6");

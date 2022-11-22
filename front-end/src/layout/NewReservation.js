@@ -77,18 +77,16 @@ function NewReservation() {
     }
   }
 
-  console.log(reservation)
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    createReservation(reservation)
+    const abortController = new AbortController();
+    createReservation(reservation, abortController.signal)
       .then(() => {
         setReservation({...reservationInitial})
         history.push(`/dashboard?date=${reservation.reservation_date}`)
       })
       .catch(setNewReservationError);
-
+    return () => abortController.abort();
   };
 
   return (

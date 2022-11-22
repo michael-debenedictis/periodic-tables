@@ -38,10 +38,10 @@ function SeatReservation() {
     const tableId = event.target.table_id.value;
     seatReservation(tableId, reservationId)
       .then(() => changeStatus(reservationId, 'seated'))
-      .then(() => history.push('/dashboard'))
+      .then(() => history.push(`/dashboard?=${reservation.reservation_date}`))
       .catch(setTableUpdatedError)
   };
-
+  console.log(reservation.reservation_date)
   return (
     <>
       <h1>Reservation:</h1>
@@ -50,6 +50,7 @@ function SeatReservation() {
         <ErrorAlert error={tablesError} />
         <ErrorAlert error={reservationError} />
         <div>
+          <h3>{reservation.reservation_time}</h3>
           <table style={{ width: "100%", border: "1px solid black" }}>
             <tr>
               <th>Id</th>

@@ -18,32 +18,34 @@ function Reservations( { reservations, setRerender } ) {
       <div className='space' >
         {reservations.map((reservation) => {
           return (
-            <div style={{border: '1px solid', borderRadius: '5px', margin: '3px', padding: '5px'}} key={reservation.reservation_time}>
+            <div style={{border: '1px solid', borderRadius: '5px', margin: '3px', padding: '5px'}} key={reservation.reservation_id}>
               <h4>{reservation.reservation_time}</h4>
               <table style={{margin: '0px'}} className='table'>
-                <tr style={{color: '#2A3A4B'}}>
-                  <th scope="col" >Id</th>
-                  <th scope='col' >Name</th>
-                  <th scope='col' >Mobile Number</th>
-                  <th scope='col' >Party</th>
-                  <th scope='col' >Status</th>
-                </tr>
-                <tr>
-                  <td>{reservation.reservation_id}</td>
-                  <td>{`${reservation.first_name} ${reservation.last_name}`}</td>
-                  <td>{reservation.mobile_number}</td>
-                  <td>{reservation.people}</td>
-                  <td>
-                    <div style={{display: 'flex', justifyContent: 'space-between' }} >
-                      <div data-reservation-id-status={reservation.reservation_id}>
-                        {reservation.status}
+                <tbody>
+                  <tr style={{color: '#2A3A4B'}}>
+                    <th scope="col" >Id</th>
+                    <th scope='col' >Name</th>
+                    <th scope='col' >Mobile Number</th>
+                    <th scope='col' >Party</th>
+                    <th scope='col' >Status</th>
+                  </tr>
+                  <tr>
+                    <td>{reservation.reservation_id}</td>
+                    <td>{`${reservation.first_name} ${reservation.last_name}`}</td>
+                    <td>{reservation.mobile_number}</td>
+                    <td>{reservation.people}</td>
+                    <td>
+                      <div style={{display: 'flex', justifyContent: 'space-between' }} >
+                        <div data-reservation-id-status={reservation.reservation_id}>
+                          {reservation.status}
+                        </div>
+                        <div>
+                          {reservation.status !== 'seated' ? <Link className='link-button' to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link> : null }
+                        </div>
                       </div>
-                      <div>
-                        {reservation.status !== 'seated' ? <Link className='link-button' to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link> : null }
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
               <div style={{display: 'flex', alignItems: 'center' }} >
                     <div>

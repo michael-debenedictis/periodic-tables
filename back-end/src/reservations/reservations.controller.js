@@ -187,6 +187,16 @@ async function reservationExists(req, res, next) {
   }
 }
 
+async function phoneNumberContainsANumber(req, res, next) {
+  const phoneNumber = req.query.mobile_number;
+  if (phoneNumber) {
+    if (phoneNumber.search(/\d/) === -1) {
+      next({status: 404, message: `The number provided: ${phoneNumber}, has no digits.`})
+    }
+  }
+  next();
+}
+
 //helpr functions --------
 
 function reservationConvertUTC(date, time) {
@@ -200,7 +210,7 @@ function reservationConvertUTC(date, time) {
 
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [asyncErrorBoundary(phoneNumberContainsANumber), asyncErrorBoundary(list)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(validStatus), asyncErrorBoundary(create)],
   changeStatus: [asyncErrorBoundary(idValid), asyncErrorBoundary(validStatusData), asyncErrorBoundary(changeStatus)],

@@ -7,7 +7,7 @@ import ErrorAlert from "./ErrorAlert";
 function NewTable() {
   const history = useHistory();
   const [tableName, setTableName] = useState('');
-  const [capacity, setCapacity] = useState(1);
+  const [capacity, setCapacity] = useState(0);
 
   const [newTableError, setNewTableError] = useState(null);
 
@@ -17,14 +17,15 @@ function NewTable() {
       table_name: event.target.table_name.value,
       capacity: Number(event.target.capacity.value),
     };
-    
-    createTable(table)
+    const abortController = new AbortController();
+    createTable(table, abortController.signal)
       .then(() => {
         setTableName('');
         setCapacity(1);
         history.push('/dashboard')
       })
       .catch(setNewTableError);
+    return () => abortController.abort();
   };
 
   const handleChange = (event) => {
