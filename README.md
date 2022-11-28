@@ -24,3 +24,4 @@ This app was built following a PERN stack, PostgreSQL, Express, React, Node. Fro
 ### documentation
 dashboard - The dashboard is displayed from the home path, it stores and shows created reservations as well as created tables 
 ![dashboard image](./front-end/.screenshots/us-01-submit-after.png)
+![dashboard image](front-end\.screenshots\us-01-submit-after.png)
