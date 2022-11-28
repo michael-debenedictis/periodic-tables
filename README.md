@@ -22,19 +22,19 @@ This repository is set up as a monorepo, meaning that the frontend and backend p
 This app was built following a PERN stack, PostgreSQL, Express, React, Node. Front end routing accomplished with react-router-dom. Styling accomplished with bootstrap and vanilla css.
 
 ### documentation:
-dashboard - The dashboard is displayed from the home path, it stores and shows created reservations for the specified date as well as created tables for the establishment. reservations can be edited from the dashboard by clicking the edit button on an accompanying reservation. A reservation also has the ability to be cancelled and removed from the dashboard with the cancel button on the accompanying reservation.
+**dashboard** - The dashboard is displayed from the home path, it stores and shows created reservations for the specified date as well as created tables for the establishment. reservations can be edited from the dashboard by clicking the edit button on an accompanying reservation. A reservation also has the ability to be cancelled and removed from the dashboard with the cancel button on the accompanying reservation.
 ![dashboard image](./front-end/screenshots/us-01-submit-after.png)
 
-new reservation - new reservation is a form which when submitted with information adds the reservation to the dashboard for the specified date.
+**new reservation** - new reservation is a form which when submitted with information adds the reservation to the dashboard for the specified date.
 ![new reservation](./front-end/screenshots/us-02-reservation-is-working-day-before.png)
 
-seat reservation - seat reservation page gives the user the ability to seat a current reservation. Upon submitting, the dashboard is updated to show that the selected table is now occupied and cannot be seated until the reservation is finished. Reservations are finished whenever the user clicks the finish button on a table occupied by a reservation.
+**seat reservation** - seat reservation page gives the user the ability to seat a current reservation. Upon submitting, the dashboard is updated to show that the selected table is now occupied and cannot be seated until the reservation is finished. Reservations are finished whenever the user clicks the finish button on a table occupied by a reservation.
 ![seat reservation](./front-end/screenshots/us-04-seat-reservation-submit-before.png)
 
-new table - new table is a form which when submitted with information adds the table to the dashboard as a new table ready for seating.
+**new table** - new table is a form which when submitted with information adds the table to the dashboard as a new table ready for seating.
 ![new table](./front-end/screenshots/us-04-create-table-submit-before.png)
 
-search - the search is a form which requires a partially or fully matching phone number and retrieves any current matching reservations.
+**search** - the search is a form which requires a partially or fully matching phone number and retrieves any current matching reservations.
 ![search](./front-end/screenshots/us-07-search-reservations-submit-valid-before.png)
 
 ### api:
