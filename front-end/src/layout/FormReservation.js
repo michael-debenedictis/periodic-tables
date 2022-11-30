@@ -6,27 +6,27 @@ function FormReservation( { handleSubmit, handleChange, reservation } ) {
   const history = useHistory();
   
   return (
-    <div className='space' >
+    <div className='space' style={{marginRight: '30px' }} >
       <form name='newreservation' onSubmit={handleSubmit} >
           <div>
             <label htmlFor='first_name'>
               First Name
               <br/>
-              <input id='first_name' name='first_name' type='text' onChange={handleChange} value={reservation.first_name} required />
+              <input id='first_name' name='first_name' type='text' onChange={handleChange} value={reservation.first_name} placeHolder='first name' required />
             </label>
           </div>
           <div>
             <label htmlFor='last_name'>
               Last Name
               <br />
-              <input id='last_name' name='last_name' type='text' onChange={handleChange} value={reservation.last_name} required />
+              <input id='last_name' name='last_name' type='text' onChange={handleChange} value={reservation.last_name} placeHolder='last name' required />
             </label>
           </div>
           <div>
             <label htmlFor='mobile_number'>
               Mobile Number
               <br/>
-              <input id='mobile_number' name="mobile_number" type='tel' onChange={handleChange} value={reservation.mobile_number} required />
+              <input id='mobile_number' name="mobile_number" type='tel' onChange={handleChange} value={reservation.mobile_number} placeHolder='###-###-####' required />
             </label>
           </div>
           <div>

@@ -9,6 +9,8 @@ Periodic Tables is a restaurant reservation web app intended to be used by resta
 
 This repository is set up as a monorepo, meaning that the frontend and backend projects are in one repository. This allows you to open both projects in the same editor.
 
+Responsive design for desktops and mobile.
+
 ### installation: 
 1. Fork and clone this repository.
 1. Run cp ./back-end/.env.sample ./back-end/.env.

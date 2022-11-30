@@ -117,12 +117,15 @@ async function validPeople(req, res, next) {
 }
 
 async function isWorkingDateAndTime(req, res, next) { //run after the dateValid and timeValid functions in the pipeline
-  const msUtcReservation = reservationConvertUTC(req.body.data.reservation_date, req.body.data.reservation_time);
-  const msUtcNow = Date.now();
+  const timeReservationUtc = reservationConvertUTC(req.body.data.reservation_date, req.body.data.reservation_time);
+  const timeCurrentUtc = new Date();
+  timeCurrentUtc.setHours(timeCurrentUtc.getHours() - 5);
+  timeCurrentUtc.setSeconds(0);
+  timeCurrentUtc.setMilliseconds(0);
   const date = new Date(`${req.body.data.reservation_date}T${req.body.data.reservation_time}`);
   const reservationEarliest = new Date(`${req.body.data.reservation_date}T10:30:00`);
   const reservationLatest = new Date(`${req.body.data.reservation_date}T21:30:00`);
-  if (msUtcReservation < msUtcNow) {
+  if (timeReservationUtc < timeCurrentUtc) {
     next({status: 400, message: 'The provided date and or time must be in the future.'});
   } else if (date.getDay() === 2) {
     next({status: 400, message: 'Restaurant closed on tuesdays.'});
@@ -187,32 +190,37 @@ async function reservationExists(req, res, next) {
   }
 }
 
-async function phoneNumberContainsANumber(req, res, next) {
-  const phoneNumber = req.query.mobile_number;
-  if (phoneNumber) {
-    if (phoneNumber.search(/\d/) === -1) {
-      next({status: 404, message: `The number provided: ${phoneNumber}, has no digits.`})
-    }
+async function phoneNumberValid(req, res, next) {
+  const phoneNumber = req.body.data.mobile_number;
+  const regex = /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
+  if (phoneNumber && !regex.test(phoneNumber)) {
+    next({status: 400, message: `Phone number ${phoneNumber} formatted incorrectly`});
+  } else {
+    next();
   }
-  next();
 }
 
 //helpr functions --------
 
 function reservationConvertUTC(date, time) {
   const ymdArray = date.split('-') // [year, month, date]
+  ymdArray[1] = ymdArray[1] - 1; // month indexed
   const timeArray = time.split(':') // [hrs, min]
   const all = [...ymdArray, ...timeArray];
-  return Date.UTC(...all)
+  const timeCurrentUtc = new Date();
+  timeCurrentUtc.setHours(timeCurrentUtc.getHours() - 5);
+  timeCurrentUtc.setSeconds(0);
+  timeCurrentUtc.setMilliseconds(0);
+  return new Date(Date.UTC(...all))
 }
 
 
 
 
 module.exports = {
-  list: [asyncErrorBoundary(phoneNumberContainsANumber), asyncErrorBoundary(list)],
+  list: [asyncErrorBoundary(list)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(validStatus), asyncErrorBoundary(create)],
+  create: [asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(phoneNumberValid), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(validStatus), asyncErrorBoundary(create)],
   changeStatus: [asyncErrorBoundary(idValid), asyncErrorBoundary(validStatusData), asyncErrorBoundary(changeStatus)],
   update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(dataProvided), asyncErrorBoundary(fieldPopulated), asyncErrorBoundary(dateValid), asyncErrorBoundary(timeValid), asyncErrorBoundary(validPeople), asyncErrorBoundary(isWorkingDateAndTime), asyncErrorBoundary(validStatus), asyncErrorBoundary(update)],
   reservationRemove: [asyncErrorBoundary(reservationRemove)],

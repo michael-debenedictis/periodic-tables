@@ -51,7 +51,7 @@ function NewTable() {
             <label htmlFor='table_name'>
               Table Name
               <br/>
-              <input id='table_name' name='table_name' type='text' minLength='2' onChange={handleChange} value={tableName} required />
+              <input id='table_name' name='table_name' type='text' minLength='2' onChange={handleChange} value={tableName} placeHolder='table name' required />
             </label>
           </div>
           <div>

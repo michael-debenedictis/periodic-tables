@@ -33,7 +33,7 @@ function Search() {
       <div className='space' >
       {reservationsError !== null && reservationsError.toString() !== "TypeError: Cannot read properties of undefined (reading 'toString')" ? <ErrorAlert error={reservationsError} /> : null}
         <form name='phonesearch' onSubmit={handleSubmit}>
-          <input id='mobile_number' placeholder="Enter a customer's phone number" name='mobile_number' type='text' />
+          <input style={{width: '250px' }} id='mobile_number' placeholder="Enter a customer's phone number" name='mobile_number' type='text' />
           <button type='submit'>Search</button>
         </form>
       </div>
