@@ -3,6 +3,7 @@
 ### deployed application links:
 front end - https://periodic-tables-front-end-0uz9.onrender.com
 back end - https://periodic-tables-back-end-hxym.onrender.com
+deployed express app may take a minute or two to spin up before serving data due to free cloud platform plan
 
 ### application summary:
 Periodic Tables is a restaurant reservation web app intended to be used by restaurant staff and management. Its purpose is assisting in keeping track of and organizing customer reservations and available tables within the user's establishment.
